@@ -11,25 +11,18 @@ import {
 } from './CreateNewBoard.styles';
 import useModalState from '../useModalState';
 import axios from 'axios';
-import { IProject } from '../../../interfaces/Kanban';
 
 const CreateNewBoard = () => {
   const [name, setName] = useState('');
-  const [newColumn, setNewColumn] = useState('');
+  const [newCategory, setNewCategory] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
-  const [columns, setColumns] = useState<string[]>([
-    'Todo',
-    'In Progress',
-    'Completed',
-  ]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [projects, setProjects] = useState<IProject[]>([]);
-  const [projectCount, setProjectCount] = useState(0);
+  const [categories, setCategories] = useState<string[]>([]);
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:5500/api/v1/Projects');
-      setProjects(response.data);
+      await axios.get(
+        'https://kanban-backend.azurewebsites.net/api/v1/Projects'
+      );
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -41,42 +34,39 @@ const CreateNewBoard = () => {
 
   const handleCreateProject = async () => {
     try {
-      const newColumns = columns.map((column) => ({
-        categoryTitle: column,
-        cards: [],
-      }));
-
-      const newProject = {
-        name,
-        data: newColumns,
+      const updatedCategories = [...categories];
+      if (newCategory.trim() !== '') {
+        updatedCategories.push(newCategory);
+      }
+      const projectData = {
+        name: name,
+        categories: updatedCategories.map((category) => ({
+          categoryTitle: category,
+        })),
       };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await axios.post(
-        'http://localhost:5500/api/v1/Projects',
-        newProject
+
+      await axios.post(
+        'https://kanban-backend.azurewebsites.net/api/v1/Projects',
+        projectData
       );
+
+      // Step 2: Optionally, you can reset the form after successful submission
       setName('');
-      handleClose();
+      setCategories([]);
+      setNewCategory('');
       fetchProjects();
       window.location.reload();
-
-      const projectsResponse = await axios.get(
-        'http://localhost:5500/api/v1/Projects'
-      );
-      setProjects(projectsResponse.data);
-      setProjectCount(projectCount + 1);
     } catch (error) {
-      console.error('Error adding project:', error);
+      console.error('Error creating project:', error);
     }
   };
 
   const handleAddColumn = () => {
-    if (newColumn.trim() === '') {
+    if (newCategory.trim() === '') {
       return;
     }
-
-    setColumns([...columns, newColumn]);
-    setNewColumn('');
+    setCategories([...categories, newCategory]);
+    setNewCategory('');
   };
 
   return (
@@ -109,22 +99,22 @@ const CreateNewBoard = () => {
                 placeholder="e.g., Web Design"
               />
               <h5>Board Columns</h5>
-              {columns.map((column, index) => (
+              {categories.map((category, index) => (
                 <BoardColumn key={index}>
                   <TextField
                     id={`column-${index}`}
-                    value={column}
+                    value={category}
                     onChange={(event) => {
-                      const updatedColumns = [...columns];
+                      const updatedColumns = [...categories];
                       updatedColumns[index] = event.target.value;
-                      setColumns(updatedColumns);
+                      setCategories(updatedColumns);
                     }}
                   />
                   <DeleteIcon
                     onClick={() => {
-                      const updatedColumns = [...columns];
+                      const updatedColumns = [...categories];
                       updatedColumns.splice(index, 1);
-                      setColumns(updatedColumns);
+                      setCategories(updatedColumns);
                     }}
                   />
                 </BoardColumn>
@@ -132,8 +122,8 @@ const CreateNewBoard = () => {
               <BoardColumn>
                 <TextField
                   id="new-column"
-                  value={newColumn}
-                  onChange={(event) => setNewColumn(event.target.value)}
+                  value={newCategory}
+                  onChange={(event) => setNewCategory(event.target.value)}
                   placeholder="New Category"
                 />
                 <DeleteIcon />
@@ -155,4 +145,5 @@ const CreateNewBoard = () => {
     </div>
   );
 };
+
 export default CreateNewBoard;

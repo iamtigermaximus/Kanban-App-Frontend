@@ -43,15 +43,37 @@ export interface ICard {
   updatedDateTime: string;
 }
 
+// export interface IProjectTask {
+//   id: number;
+//   title: string;
+//   completed: boolean;
+//   subtask: ISubtask[];
+// }
+
+// export interface ISubtask {
+//   id: number;
+//   title: string;
+//   completed: boolean;
+// }
+
+// In the interfaces/Kanban.ts file
 export interface IProjectTask {
-  id: number;
-  title: string;
   completed: boolean;
-  subtask: ISubtask[];
+  text: string;
+  cardId: number;
+  subtask: ISubtask[]; // Change 'subtasks' to 'subtask'
+  id: number;
+  createdDateTime: string;
+  updatedDateTime: string;
 }
 
+// ...
+
 export interface ISubtask {
-  id: number;
-  title: string;
   completed: boolean;
+  text: string;
+  projectTaskId: number;
+  id: number;
+  createdDateTime: string;
+  updatedDateTime: string;
 }

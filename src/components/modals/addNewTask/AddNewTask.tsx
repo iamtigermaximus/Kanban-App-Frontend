@@ -68,10 +68,6 @@ const AddNewTask = () => {
                 <TextField id="outlined" />
                 <DeleteIcon />
               </SubtasksColumn>
-              <SubtasksColumn>
-                <TextField id="outlined" />
-                <DeleteIcon />
-              </SubtasksColumn>
               <ModalButtonContainer>
                 <ModalButton>+ Add New Subtask</ModalButton>
               </ModalButtonContainer>

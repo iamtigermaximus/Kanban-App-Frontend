@@ -10,10 +10,25 @@ import {
   style,
 } from './AddNewColumn.styles';
 import useModalState from '../useModalState';
+import { IProject } from '../../../interfaces/Kanban';
+import { useState } from 'react';
 
-const AddNewColumn = () => {
+export type ColumnProps = {
+  selectedProject: IProject | null; // Replace 'IProject' with the appropriate type for your project object
+};
+
+const AddNewColumn = ({ selectedProject }: ColumnProps) => {
+  const [newCategory, setNewCategory] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
+  const [categories, setCategories] = useState<string[]>([]);
 
+  const handleAddColumn = () => {
+    if (newCategory.trim() === '') {
+      return;
+    }
+    setCategories([...categories, newCategory]);
+    setNewCategory('');
+  };
   return (
     <div>
       <ColumnTaskContainer onClick={handleOpen}>
@@ -39,22 +54,27 @@ const AddNewColumn = () => {
           >
             <div>
               <h5>Board Name</h5>
-              <TextField id="outlined" defaultValue="eg. Web Design" />
+              <TextField id="outlined" value={selectedProject?.name} />
               <h5>Board Columns</h5>
+              {selectedProject?.categories.map((category) => (
+                <BoardColumn>
+                  <TextField id="outlined" value={category.categoryTitle} />
+                  <DeleteIcon />
+                </BoardColumn>
+              ))}
               <BoardColumn>
-                <TextField id="outlined" defaultValue="Todo" />
-                <DeleteIcon />
-              </BoardColumn>
-              <BoardColumn>
-                <TextField id="outlined" defaultValue="In Progress" />
-                <DeleteIcon />
-              </BoardColumn>
-              <BoardColumn>
-                <TextField id="outlined" defaultValue="Completed" />
+                <TextField
+                  id="new-column"
+                  value={newCategory}
+                  onChange={(event) => setNewCategory(event.target.value)}
+                  placeholder="New Category"
+                />
                 <DeleteIcon />
               </BoardColumn>
               <ModalButtonContainer>
-                <ModalButton>+ Add New Column</ModalButton>
+                <ModalButton onClick={handleAddColumn}>
+                  + Add New Column
+                </ModalButton>
               </ModalButtonContainer>
               <ModalButtonContainer>
                 <ModalButton>Save Changes</ModalButton>

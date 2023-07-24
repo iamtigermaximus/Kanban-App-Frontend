@@ -50,7 +50,6 @@ const CreateNewBoard = () => {
         projectData
       );
 
-      // Step 2: Optionally, you can reset the form after successful submission
       setName('');
       setCategories([]);
       setNewCategory('');

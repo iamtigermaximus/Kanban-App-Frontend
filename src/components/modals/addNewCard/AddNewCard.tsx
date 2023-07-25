@@ -24,13 +24,74 @@ const AddNewCard = () => {
   const [status, setStatus] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
   const [checked, setChecked] = useState(false);
+  const [cardName, setCardName] = useState('');
+  const [cardDescription, setCardDescription] = useState('');
+  const [tasks, setTasks] = useState([
+    {
+      taskName: '',
+      subtaskName: '',
+      completed: false,
+    },
+  ]);
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    const { checked } = event.target;
+  };
+
+  const handleTaskNameChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].taskName = event.target.value;
+    setTasks(updatedTasks);
+  };
+
+  const handleSubtaskNameChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].subtaskName = event.target.value;
+    setTasks(updatedTasks);
+  };
+
+  const handleAddTask = () => {
+    setTasks([...tasks, { taskName: '', subtaskName: '', completed: false }]);
+  };
+
+  const handleRemoveTask = (index: number) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value as string);
+  };
+
+  const handleCreateTask = () => {
+    const newCard = {
+      title: cardName,
+      desc: cardDescription,
+      projectTasks: tasks.map((task) => ({
+        completed: task.completed,
+        text: task.taskName,
+        subtasks: [
+          {
+            completed: task.completed,
+            text: task.subtaskName,
+          },
+        ],
+      })),
+    };
+
+    console.log(newCard); // This will contain the data for the new card with tasks and subtasks
+
+    // You can further process the newCard data here (e.g., submit it to the server, update state, etc.).
+
+    // Close the modal
+    handleClose();
   };
 
   return (
@@ -60,8 +121,8 @@ const AddNewCard = () => {
             <div>
               <TextField
                 id="new-column"
-                // value={selectedCardData.title}
-                // onChange={(event) => setNewCategory(event.target.value)}
+                value={cardName}
+                onChange={(e) => setCardName(e.target.value)}
                 label="CARD NAME"
                 fullWidth
                 InputLabelProps={{
@@ -79,13 +140,13 @@ const AddNewCard = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                value={cardDescription}
+                onChange={(e) => setCardDescription(e.target.value)}
               />
               <div>
                 <SubtasksColumn>
                   <TextField
                     id="new-column"
-                    // value={selectedCardData.title}
-                    // onChange={(event) => setNewCategory(event.target.value)}
                     label="TASK"
                     sx={{ my: 1, width: '100%' }}
                     InputLabelProps={{

@@ -183,7 +183,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                             id="new-column"
                             multiline
                             label="SUBTASK"
-                            value={selectedCardData.desc}
+                            value={st.text}
                             rows={1}
                             fullWidth
                             sx={{ my: 1 }}

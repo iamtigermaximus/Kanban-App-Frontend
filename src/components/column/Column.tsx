@@ -3,10 +3,12 @@ import {
   Box,
   Checkbox,
   FormControl,
+  InputLabel,
   MenuItem,
   Modal,
   Select,
   SelectChangeEvent,
+  TextField,
 } from '@mui/material';
 import {
   TaskBoardContainer,
@@ -15,6 +17,7 @@ import {
   ProjectColumn,
   ProjectColumnCard,
   ProjectBoardHeader,
+  CardModalContainer,
 } from './Column.styles';
 import Card from '../card/Card';
 import AddNewCard from '../modals/addNewCard/AddNewCard';
@@ -117,12 +120,33 @@ const Column = ({ selectedProject }: ColumnProps) => {
           onClose={handleCloseCard}
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
+          sx={{ height: '100%' }}
         >
           <>
             {selectedCardData && (
               <Box sx={{ ...style, backgroundColor: 'white' }}>
-                <h2 id="parent-modal-title">{selectedCardData.title}</h2>
-                <p>{selectedCardData.desc}</p>
+                <CardModalContainer>
+                  <TextField
+                    id="new-column"
+                    value={selectedCardData.title}
+                    // onChange={(event) => setNewCategory(event.target.value)}
+                    label="CARD NAME"
+                    fullWidth
+                    sx={{ my: 1 }}
+                  />
+                  <TextField
+                    id="new-column"
+                    multiline
+                    label="DESCRIPTION"
+                    value={selectedCardData.desc}
+                    rows={4}
+                    fullWidth
+                    sx={{ my: 1 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </CardModalContainer>
                 <Box
                   component="form"
                   sx={{
@@ -136,7 +160,18 @@ const Column = ({ selectedProject }: ColumnProps) => {
                 >
                   {selectedCardData.projectTasks.map((pt: IProjectTask) => (
                     <div key={pt.id}>
-                      <h2>{pt.text}</h2>
+                      <TextField
+                        id="new-column"
+                        multiline
+                        label="CARD TASK"
+                        value={pt.text}
+                        rows={2}
+                        fullWidth
+                        sx={{ my: 1 }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
                       {pt.subtasks.map((st: ISubtask) => (
                         <SubtasksColumn key={st.id}>
                           <Checkbox
@@ -144,15 +179,26 @@ const Column = ({ selectedProject }: ColumnProps) => {
                             onChange={handleCheckbox}
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
-                          <h3>{st.text}</h3>
+                          <TextField
+                            id="new-column"
+                            multiline
+                            label="SUBTASK"
+                            value={selectedCardData.desc}
+                            rows={1}
+                            fullWidth
+                            sx={{ my: 1 }}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                          />
                         </SubtasksColumn>
                       ))}
-
-                      <h5>Current Status</h5>
+                      <InputLabel sx={{ my: 1, fontSize: '12px' }}>
+                        CURRENT STATUS
+                      </InputLabel>
                       <FormControl fullWidth>
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          id="new-column"
                           value={status} // Set the default value to the card's category title
                           onChange={handleChange}
                         >

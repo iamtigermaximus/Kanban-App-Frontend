@@ -101,3 +101,9 @@ export const ProjectBoardHeader = styled('div')`
   font-weight: 700;
   color: white;
 `;
+
+export const CardModalContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;

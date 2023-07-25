@@ -1,7 +1,7 @@
 import { ICard } from '../../interfaces/Kanban';
 import { CardSubtitle, CardTitle, ColumnTask } from './Card.styles';
 
-const Card = ({ title, desc }: ICard) => {
+const Card = ({ id, title, desc, projectTasks, subtasks }: ICard) => {
   return (
     <ColumnTask>
       <CardTitle>{title}</CardTitle>

@@ -16,7 +16,9 @@ const ProjectsList = ({ handleProjectSelect }: ProjectsListProps) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://kanban-backend.azurewebsites.net/api/v1/Projects'); // Replace with your API endpoint
+      const response = await axios.get(
+        'https://kanban-backend.azurewebsites.net/api/v1/Projects'
+      ); // Replace with your API endpoint
       setProjects(response.data); // Handle the retrieved data
       setProjectCount(response.data.length); // Set the project count based on the fetched data
     } catch (error) {

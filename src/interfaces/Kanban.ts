@@ -5,7 +5,7 @@ export interface ITask {
 }
 
 export type ColumnProps = {
-  selectedProject: IProject | null; // Replace 'IProject' with the appropriate type for your project object
+  selectedProject: IProject | null;
 };
 
 export type ColumnsProps = {
@@ -41,33 +41,19 @@ export interface ICard {
   projectTasks: IProjectTask[];
   createdDateTime: string;
   updatedDateTime: string;
+  subtasks: ISubtask[];
+  status: string;
 }
 
-// export interface IProjectTask {
-//   id: number;
-//   title: string;
-//   completed: boolean;
-//   subtask: ISubtask[];
-// }
-
-// export interface ISubtask {
-//   id: number;
-//   title: string;
-//   completed: boolean;
-// }
-
-// In the interfaces/Kanban.ts file
 export interface IProjectTask {
   completed: boolean;
   text: string;
   cardId: number;
-  subtask: ISubtask[]; // Change 'subtasks' to 'subtask'
+  subtasks: ISubtask[];
   id: number;
   createdDateTime: string;
   updatedDateTime: string;
 }
-
-// ...
 
 export interface ISubtask {
   completed: boolean;

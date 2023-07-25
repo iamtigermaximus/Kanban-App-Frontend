@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   FormControl,
   MenuItem,
   Modal,
@@ -16,12 +17,17 @@ import {
 } from './AddNewCard.styles';
 import { SubtasksColumn } from '../addNewTask/AddNewTask.styles';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import useModalState from '../useModalState';
 
 const AddNewCard = () => {
   const [status, setStatus] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
+  const [checked, setChecked] = useState(false);
+
+  const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value as string);
@@ -52,22 +58,61 @@ const AddNewCard = () => {
             autoComplete="off"
           >
             <div>
-              <h5>Task Name</h5>
               <TextField
-                id="outlined"
-                defaultValue="e.g. Remove Console logs"
+                id="new-column"
+                // value={selectedCardData.title}
+                // onChange={(event) => setNewCategory(event.target.value)}
+                label="CARD NAME"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ my: 1 }}
               />
-              <h5>Description</h5>
-              <TextField id="outlined-multiline-static" multiline rows={4} />
-              <h5>Subtasks</h5>
-              <SubtasksColumn>
-                <TextField id="outlined" />
-                <DeleteIcon />
-              </SubtasksColumn>
-              <SubtasksColumn>
-                <TextField id="outlined" />
-                <DeleteIcon />
-              </SubtasksColumn>
+              <TextField
+                id="new-column"
+                multiline
+                label="DESCRIPTION"
+                rows={2}
+                fullWidth
+                sx={{ my: 1 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <div>
+                <SubtasksColumn>
+                  <TextField
+                    id="new-column"
+                    // value={selectedCardData.title}
+                    // onChange={(event) => setNewCategory(event.target.value)}
+                    label="TASK"
+                    sx={{ my: 1, width: '100%' }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <DeleteIcon />
+                </SubtasksColumn>
+                <SubtasksColumn>
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleCheckbox}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                  <TextField
+                    id="new-column"
+                    multiline
+                    label="SUBTASK"
+                    rows={1}
+                    fullWidth
+                    sx={{ my: 1 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </SubtasksColumn>
+              </div>
               <ModalButtonContainer>
                 <ModalButton>+ Add New Subtask</ModalButton>
               </ModalButtonContainer>

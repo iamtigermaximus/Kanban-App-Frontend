@@ -87,3 +87,10 @@ export const style = {
   width: 400,
   p: 4,
 };
+
+export const TasksContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;

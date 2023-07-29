@@ -29,6 +29,8 @@ import {
   IProjectTask,
   ISubtask,
 } from '../../interfaces/Kanban';
+//import EditCardModal from '../modals/editCardModal/editCardModal';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const style = {
   position: 'absolute',
@@ -84,7 +86,6 @@ const Column = ({ selectedProject }: ColumnProps) => {
     <>
       <TaskBoardContainer>
         <ProjectBoardHeader>{selectedProject?.name}</ProjectBoardHeader>
-
         <ProjectColumn>
           {selectedProject?.categories.map((category) => (
             <ProjectColumnCard key={category.id}>
@@ -94,7 +95,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                 </ColumnHeader>
                 {category.cards.map((card) => (
                   <>
-                    <div onClick={() => handleOpenCard(card)}>
+                    <div key={card.id} onClick={() => handleOpenCard(card)}>
                       <Card
                         id={card.id}
                         title={card.title}
@@ -105,6 +106,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                         createdDateTime={card.createdDateTime}
                         updatedDateTime={card.updatedDateTime}
                         status={card.status}
+                        onClick={() => handleOpenCard(card)}
                       />
                     </div>
                   </>
@@ -139,7 +141,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                     multiline
                     label="DESCRIPTION"
                     value={selectedCardData.desc}
-                    rows={4}
+                    rows={2}
                     fullWidth
                     sx={{ my: 1 }}
                     InputLabelProps={{
@@ -160,18 +162,22 @@ const Column = ({ selectedProject }: ColumnProps) => {
                 >
                   {selectedCardData.projectTasks.map((pt: IProjectTask) => (
                     <div key={pt.id}>
-                      <TextField
-                        id="new-column"
-                        multiline
-                        label="CARD TASK"
-                        value={pt.text}
-                        rows={2}
-                        fullWidth
-                        sx={{ my: 1 }}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
+                      <SubtasksColumn>
+                        <TextField
+                          id="new-column"
+                          multiline
+                          label="CARD TASK"
+                          value={pt.text}
+                          rows={2}
+                          fullWidth
+                          sx={{ my: 1 }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                        <DeleteIcon />
+                      </SubtasksColumn>
+
                       {pt.subtasks.map((st: ISubtask) => (
                         <SubtasksColumn key={st.id}>
                           <Checkbox
@@ -191,29 +197,32 @@ const Column = ({ selectedProject }: ColumnProps) => {
                               shrink: true,
                             }}
                           />
+                          <DeleteIcon />
                         </SubtasksColumn>
                       ))}
-                      <InputLabel sx={{ my: 1, fontSize: '12px' }}>
-                        CURRENT STATUS
-                      </InputLabel>
-                      <FormControl fullWidth>
-                        <Select
-                          id="new-column"
-                          value={status} // Set the default value to the card's category title
-                          onChange={handleChange}
-                        >
-                          {selectedProject?.categories.map((category) => (
-                            <MenuItem
-                              key={category.id}
-                              value={category.categoryTitle}
-                            >
-                              {category.categoryTitle}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
                     </div>
                   ))}
+                  <div>
+                    <InputLabel sx={{ my: 1, fontSize: '12px' }}>
+                      CURRENT STATUS
+                    </InputLabel>
+                    <FormControl fullWidth>
+                      <Select
+                        id="new-column"
+                        value={status} // Set the default value to the card's category title
+                        onChange={handleChange}
+                      >
+                        {selectedProject?.categories.map((category) => (
+                          <MenuItem
+                            key={category.id}
+                            value={category.categoryTitle}
+                          >
+                            {category.categoryTitle}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
                 </Box>
               </Box>
             )}

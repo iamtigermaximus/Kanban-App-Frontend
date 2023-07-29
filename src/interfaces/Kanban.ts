@@ -43,6 +43,7 @@ export interface ICard {
   updatedDateTime: string;
   subtasks: ISubtask[];
   status: string;
+  onClick: () => void;
 }
 
 export interface IProjectTask {

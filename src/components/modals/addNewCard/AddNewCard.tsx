@@ -23,6 +23,7 @@ import useModalState from '../useModalState';
 const AddNewCard = () => {
   const [status, setStatus] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
+  // eslint-disable-next-line
   const [checked, setChecked] = useState(false);
   const [cardName, setCardName] = useState('');
   const [cardDescription, setCardDescription] = useState('');
@@ -35,9 +36,10 @@ const AddNewCard = () => {
   ]);
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
+    // eslint-disable-next-line
     const { checked } = event.target;
   };
-
+  // eslint-disable-next-line
   const handleTaskNameChange = (
     event: ChangeEvent<HTMLInputElement>,
     index: number
@@ -46,7 +48,7 @@ const AddNewCard = () => {
     updatedTasks[index].taskName = event.target.value;
     setTasks(updatedTasks);
   };
-
+  // eslint-disable-next-line
   const handleSubtaskNameChange = (
     event: ChangeEvent<HTMLInputElement>,
     index: number
@@ -55,11 +57,11 @@ const AddNewCard = () => {
     updatedTasks[index].subtaskName = event.target.value;
     setTasks(updatedTasks);
   };
-
+  // eslint-disable-next-line
   const handleAddTask = () => {
     setTasks([...tasks, { taskName: '', subtaskName: '', completed: false }]);
   };
-
+  // eslint-disable-next-line
   const handleRemoveTask = (index: number) => {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
@@ -69,7 +71,7 @@ const AddNewCard = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value as string);
   };
-
+  // eslint-disable-next-line
   const handleCreateTask = () => {
     const newCard = {
       title: cardName,

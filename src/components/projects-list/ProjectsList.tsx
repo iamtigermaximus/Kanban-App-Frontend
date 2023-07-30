@@ -18,16 +18,22 @@ const ProjectsList = ({ handleProjectSelect }: ProjectsListProps) => {
     try {
       const response = await axios.get(
         'https://kanban-backend.azurewebsites.net/api/v1/Projects'
-      ); // Replace with your API endpoint
-      setProjects(response.data); // Handle the retrieved data
-      setProjectCount(response.data.length); // Set the project count based on the fetched data
+      );
+      const fetchedProjects = response.data;
+      setProjects(fetchedProjects);
+      setProjectCount(fetchedProjects.length);
+
+      // Set the first project as the default and selected project
+      if (fetchedProjects.length > 0) {
+        setSelectedProject(fetchedProjects[0]);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchData(); // Call the function when the component mounts
+    fetchData();
   }, []);
 
   const selectProject = (project: IProject) => {

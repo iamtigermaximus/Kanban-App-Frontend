@@ -12,11 +12,24 @@ import {
 import useModalState from '../useModalState';
 import axios from 'axios';
 
+export interface Category {
+  categoryTitle: string;
+  projectId: number;
+}
+
+export interface ProjectData {
+  name: string;
+  categories: Category[];
+}
+
 const CreateNewBoard = () => {
-  const [name, setName] = useState('');
-  const [newCategory, setNewCategory] = useState('');
   const { open, handleOpen, handleClose } = useModalState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [projectData, setProjectData] = useState<ProjectData>({
+    name: '',
+    categories: [],
+  });
+  const [newCategory, setNewCategory] = useState('');
+  const { name, categories } = projectData;
 
   const fetchProjects = async () => {
     try {
@@ -34,26 +47,23 @@ const CreateNewBoard = () => {
 
   const handleCreateProject = async () => {
     try {
+      const { name, categories } = projectData;
       const updatedCategories = [...categories];
       if (newCategory.trim() !== '') {
-        updatedCategories.push(newCategory);
+        updatedCategories.push({ categoryTitle: newCategory, projectId: 0 });
       }
-      const projectData = {
+      const updatedProjectData = {
         name: name,
-        categories: updatedCategories.map((category) => ({
-          categoryTitle: category,
-        })),
+        categories: updatedCategories,
       };
+
+      console.log(updatedProjectData);
 
       await axios.post(
         'https://kanban-backend.azurewebsites.net/api/v1/Projects',
-        projectData
+        updatedProjectData
       );
-
-      setName('');
-      setCategories([]);
-      setNewCategory('');
-      fetchProjects();
+      console.log('Project created successfully!');
       window.location.reload();
     } catch (error) {
       console.error('Error creating project:', error);
@@ -64,7 +74,13 @@ const CreateNewBoard = () => {
     if (newCategory.trim() === '') {
       return;
     }
-    setCategories([...categories, newCategory]);
+    setProjectData((prevData) => ({
+      ...prevData,
+      categories: [
+        ...prevData.categories,
+        { categoryTitle: newCategory, projectId: 0 },
+      ],
+    }));
     setNewCategory('');
   };
 
@@ -94,7 +110,9 @@ const CreateNewBoard = () => {
               <TextField
                 id="outlined"
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) =>
+                  setProjectData({ ...projectData, name: event.target.value })
+                }
                 placeholder="e.g., Web Design"
               />
               <h5>Board Columns</h5>
@@ -102,18 +120,27 @@ const CreateNewBoard = () => {
                 <BoardColumn key={index}>
                   <TextField
                     id={`column-${index}`}
-                    value={category}
+                    value={category.categoryTitle}
                     onChange={(event) => {
                       const updatedColumns = [...categories];
-                      updatedColumns[index] = event.target.value;
-                      setCategories(updatedColumns);
+                      updatedColumns[index] = {
+                        ...updatedColumns[index],
+                        categoryTitle: event.target.value,
+                      };
+                      setProjectData((prevData) => ({
+                        ...prevData,
+                        categories: updatedColumns,
+                      }));
                     }}
                   />
                   <DeleteIcon
                     onClick={() => {
                       const updatedColumns = [...categories];
                       updatedColumns.splice(index, 1);
-                      setCategories(updatedColumns);
+                      setProjectData((prevData) => ({
+                        ...prevData,
+                        categories: updatedColumns,
+                      }));
                     }}
                   />
                 </BoardColumn>

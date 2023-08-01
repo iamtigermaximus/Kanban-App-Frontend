@@ -57,7 +57,7 @@ const AddNewColumn = ({ selectedProject }: ColumnProps) => {
               <TextField id="outlined" value={selectedProject?.name} />
               <h5>Board Columns</h5>
               {selectedProject?.categories.map((category) => (
-                <BoardColumn>
+                <BoardColumn key={category.id}>
                   <TextField id="outlined" value={category.categoryTitle} />
                   <DeleteIcon />
                 </BoardColumn>

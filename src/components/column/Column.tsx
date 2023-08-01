@@ -31,6 +31,7 @@ import {
 } from '../../interfaces/Kanban';
 //import EditCardModal from '../modals/editCardModal/editCardModal';
 import DeleteIcon from '@mui/icons-material/Delete';
+import React from 'react';
 
 const style = {
   position: 'absolute',
@@ -86,7 +87,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
     <>
       <TaskBoardContainer>
         <ProjectBoardHeader>{selectedProject?.name}</ProjectBoardHeader>
-        <ProjectColumn>
+        <ProjectColumn key={selectedProject?.id}>
           {selectedProject?.categories.map((category) => (
             <ProjectColumnCard key={category.id}>
               <ColumnTaskContainer>
@@ -94,7 +95,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                   {category.categoryTitle} ({category.cards.length})
                 </ColumnHeader>
                 {category.cards.map((card) => (
-                  <>
+                  <React.Fragment key={card.id}>
                     <div key={card.id} onClick={() => handleOpenCard(card)}>
                       <Card
                         id={card.id}
@@ -109,7 +110,7 @@ const Column = ({ selectedProject }: ColumnProps) => {
                         onClick={() => handleOpenCard(card)}
                       />
                     </div>
-                  </>
+                  </React.Fragment>
                 ))}
               </ColumnTaskContainer>
               <AddNewCard />
